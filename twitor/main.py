@@ -59,7 +59,7 @@ class Twitor:
         url: str = Config.TWITTER_HOST + Config.TWITTER_USER_PATH.format(id=screen_name)
         self.driver.access(url)
         self.driver.sleep(1)
-        if "@" not in self.driver.get_title():
+        if "@" not in self.driver.title:
             raise Exception("user not found.")
 
     def __enter__(self) -> Any:

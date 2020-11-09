@@ -32,7 +32,7 @@ from ..consts.config import Config
 from .utils import download_driver
 
 
-class Driver:
+class Driver(Chrome):
     def __init__(self, os_type: str, headless: bool = False) -> None:
         driver_path = Config.CHROME_DRIVER_PATH[os_type]
         if not os.path.exists(driver_path):
@@ -45,24 +45,21 @@ class Driver:
             options.add_argument("--headless")
             options.add_argument("--disable-gpu")
         options.add_argument("--start-maximized")
-        self.chrome = Chrome(options=options, executable_path=driver_path)
+        Chrome.__init__(self, options=options, executable_path=driver_path)
 
     def sleep(self, seconds: int) -> None:
         sleep(seconds)
 
     def access(self, url: str) -> None:
-        self.chrome.get(url)
+        super().get(url)
 
     def input_text_by_xpath(self, text: str, xpath: str) -> None:
-        xpath_element = self.chrome.find_element_by_xpath(xpath)
+        xpath_element = super().find_element_by_xpath(xpath)
         xpath_element.send_keys(text)
 
     def click_button_by_xpath(self, xpath: str) -> None:
-        xpath_element = self.chrome.find_element_by_xpath(xpath)
+        xpath_element = super().find_element_by_xpath(xpath)
         xpath_element.click()
 
-    def get_title(self) -> str:
-        return self.chrome.title
-
     def exit(self) -> None:
-        self.chrome.quit()
+        super().quit()
